@@ -1,0 +1,194 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\CourseResource\Pages;
+use App\Models\Course;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Card;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\BadgeColumn;
+
+class CourseResource extends Resource
+{
+    protected static ?string $model = Course::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
+    protected static ?string $navigationLabel = 'Courses';
+    protected static ?string $pluralModelLabel = 'Courses';
+    protected static ?string $modelLabel = 'Course';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Tabs::make('Course Tabs')
+                    ->tabs([
+                        // ---------------- Image Tab ----------------
+                        Tabs\Tab::make('Image')
+                            ->schema([
+                                Card::make()
+                                    ->schema([
+                                       Forms\Components\FileUpload::make('image')
+                                        ->label('Course Image')
+                                        ->image()
+                                        ->directory('courses')
+                                        ->disk('public')
+                                        ->helperText('Upload course cover image')
+                                    ]),
+                            ]),
+
+                        // ---------------- Title & Description Tab ----------------
+                        Tabs\Tab::make('Title & Description')
+                            ->schema([
+                                Card::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('title_en')
+                                            ->label('Title (EN)')
+                                            ->required(),
+
+                                        Forms\Components\TextInput::make('title_ar')
+                                            ->label('Title (AR)')
+                                            ->required(),
+
+                                        Forms\Components\Textarea::make('description_en')
+                                            ->label('Description (EN)')
+                                            ->rows(4),
+
+                                        Forms\Components\Textarea::make('description_ar')
+                                            ->label('Description (AR)')
+                                            ->rows(4),
+                                    ]),
+                            ]),
+
+                        // ---------------- Pricing & Duration Tab ----------------
+                        Tabs\Tab::make('Pricing & Duration')
+                            ->schema([
+                                Card::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('price_usd')
+                                            ->numeric()
+                                            ->label('Price (USD)')
+                                            ->required(),
+
+                                        Forms\Components\TextInput::make('price_egp')
+                                            ->numeric()
+                                            ->label('Price (EGP)')
+                                            ->required(),
+
+                                        Forms\Components\TextInput::make('duration_by_weak')
+                                            ->numeric()
+                                            ->label('Duration per Week (hours)')
+                                            ->required(),
+                                    ]),
+                            ]),
+
+                        // ---------------- Instructor Tab ----------------
+                        Tabs\Tab::make('Instructor')
+                            ->schema([
+                                Card::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('instructor')
+                                            ->label('Instructor')
+                                            ->default('Barakat Aziz')
+                                            ->required(),
+                                    ]),
+                            ]),
+
+                        // ---------------- Videos Tab ----------------
+                        Tabs\Tab::make('Videos')
+                            ->schema([
+                                Card::make()
+                                    ->schema([
+                                        Forms\Components\Repeater::make('videos')
+                                            ->label('Videos')
+                                            ->schema([
+                                                Forms\Components\TextInput::make('title')
+                                                    ->label('Video Title')
+                                                    ->required(),
+
+                                                Forms\Components\TextInput::make('url')
+                                                    ->label('Video URL')
+                                                    ->url()
+                                                    ->required(),
+                                            ])
+                                            ->default([])
+                                            ->collapsible()
+                                            ->orderable(),
+                                    ]),
+                            ]),
+                    ]),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                ImageColumn::make('image')
+                    ->getStateUsing(fn ($record) => $record->image ? asset('storage/' . $record->image) : null)
+                    ->label('Image')
+                    ->size(100),
+
+                TextColumn::make('title_en')
+                    ->label('Title (EN)')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('title_ar')
+                    ->label('Title (AR)')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('instructor')
+                    ->label('Instructor')
+                    ->sortable(),
+
+                BadgeColumn::make('price_usd')
+                    ->label('Price (USD)')
+                    ->color('success'),
+
+                BadgeColumn::make('price_egp')
+                    ->label('Price (EGP)')
+                    ->color('primary'),
+
+                TextColumn::make('duration_by_weak')
+                    ->label('Duration (hours)')
+                    ->sortable(),
+
+                TextColumn::make('videos')
+                    ->label('Videos Count')
+                    ->getStateUsing(fn($record) => count($record->videos))
+                    ->sortable(),
+            ])
+            ->actions([
+                Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
+                Tables\Actions\EditAction::make()->icon('heroicon-o-pencil'),
+                Tables\Actions\DeleteAction::make()->icon('heroicon-o-trash'),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make()->icon('heroicon-o-trash'),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListCourses::route('/'),
+            'create' => Pages\CreateCourse::route('/create'),
+            'view' => Pages\ViewCourse::route('/{record}'),
+            'edit' => Pages\EditCourse::route('/{record}/edit'),
+        ];
+    }
+}
