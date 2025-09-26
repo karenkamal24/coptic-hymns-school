@@ -21,7 +21,7 @@ class InstructorService
                 'specialty' => $lang === 'ar' ? $instructor->specialty_ar : $instructor->specialty_en,
                 'description' => $lang === 'ar' ? $instructor->description_ar : $instructor->description_en,
                 'experience' => $instructor->experience,
-                'images' => $images, // دلوقتي مجرد array من روابط الصور
+                'images' => $images, 
                 'contacts' => $instructor->contacts ?? [],
                 'students_count' => 0,
             ];

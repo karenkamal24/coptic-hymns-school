@@ -49,6 +49,12 @@ class Course extends Model
     {
         return app()->getLocale() === 'ar' ? $this->description_ar : $this->description_en;
     }
+
+    public function enrollments()
+{
+    return $this->hasMany(Enrollment::class);
+}
+
 //     public function reviews()
 // {
 //     return $this->hasMany(CourseReview::class);

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('full_name_ar');
             $table->string('specialty_en')->nullable();
             $table->string('specialty_ar')->nullable();
-            $table->string('experience')->nullable();
             $table->text('description_en')->nullable();
             $table->text('description_ar')->nullable();
             $table->json('images')->nullable();

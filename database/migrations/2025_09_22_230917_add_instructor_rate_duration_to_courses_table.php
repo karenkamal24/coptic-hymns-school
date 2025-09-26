@@ -21,10 +21,19 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        Schema::table('courses', function (Blueprint $table) {
-          $table->dropColumn(['instructor', 'rate', 'duration']);
-        });
-    }
+public function down(): void
+{
+    Schema::table('courses', function (Blueprint $table) {
+        if (Schema::hasColumn('courses', 'instructor')) {
+            $table->dropColumn('instructor');
+        }
+        if (Schema::hasColumn('courses', 'rate')) {
+            $table->dropColumn('rate');
+        }
+        if (Schema::hasColumn('courses', 'duration')) {
+            $table->dropColumn('duration');
+        }
+    });
+}
+
 };
