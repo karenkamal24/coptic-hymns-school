@@ -22,7 +22,11 @@ class InstructorResource extends Resource
 {
     protected static ?string $model = Instructor::class;
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
-    protected static ?string $navigationGroup = 'Instructors';
+
+
+    protected static ?string $navigationLabel = 'Instructor';
+
+    protected static ?string $navigationGroup = 'settings';
 
     // Form
     public static function form(Forms\Form $form): Forms\Form
@@ -43,22 +47,22 @@ class InstructorResource extends Resource
                     ]),
                 ]),
 
-          Section::make('Media')
-    ->schema([
-      Repeater::make('images')
-    ->label('Images')
-    ->schema([
-        FileUpload::make('image')
-            ->label('Upload Image')
-            ->image() // لازم تكون صورة
-            ->directory('instructors')
-            ->visibility('public')
-            ->storeFileNamesIn('images') // يخزن الاسم في العمود images
-            ->imageResizeMode('cover') // لو عايزة resize
-            ->imageCropAspectRatio('1:1') // لو عايزة crop
-    ])
-    ->columns(1)
-    ]),
+            Section::make('Media')
+                ->schema([
+                    Repeater::make('images')
+                        ->label('Images')
+                        ->schema([
+                            FileUpload::make('image')
+                                ->label('Upload Image')
+                                ->image()
+                                ->directory('instructors')
+                                ->visibility('public')
+                                ->storeFileNamesIn('images')
+                                ->imageResizeMode('cover')
+                                ->imageCropAspectRatio('1:1')
+                        ])
+                        ->columns(1)
+                ]),
 
             Section::make('Contacts')
                 ->schema([
@@ -81,12 +85,13 @@ class InstructorResource extends Resource
             TextColumn::make('experience')->label('Experience')->sortable(),
 
         ])
-        ->actions([
-            Tables\Actions\EditAction::make(),
-        ])
-        ->bulkActions([
-            Tables\Actions\DeleteBulkAction::make(),
-        ]);
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]);
     }
 
     // Pages
@@ -96,6 +101,7 @@ class InstructorResource extends Resource
             'index' => Pages\ListInstructors::route('/'),
             'create' => Pages\CreateInstructor::route('/create'),
             'edit' => Pages\EditInstructor::route('/{record}/edit'),
+            'view' => Pages\ViewInstructor::route('/{record}'),
         ];
     }
 }

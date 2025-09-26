@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\CourseService;
 
-
 class CourseController extends Controller
 {
     protected CourseService $courseService;
@@ -18,8 +17,8 @@ class CourseController extends Controller
 
     public function index(Request $request)
     {
-        $ip = $request->ip();
-        $lang = $request->header('Accept-Language', 'en');
+        $ip = $request->ip(); // ناخد الـ IP تلقائياً
+        $lang = $request->header('Accept-Language'); // لو العميل حدد اللغة
 
         $courses = $this->courseService->getCourses($ip, $lang);
 
@@ -30,18 +29,17 @@ class CourseController extends Controller
         ]);
     }
 
-    public function show(Request $request, $id)
-{
-    $ip = $request->ip();
-    $lang = $request->header('Accept-Language', 'en');
+    public function show(Request $request, int $id)
+    {
+        $ip = $request->ip();
+        $lang = $request->header('Accept-Language');
 
-    $course = $this->courseService->getCourseById($id, $ip, $lang);
+        $course = $this->courseService->getCourseById($id, $ip, $lang);
 
-    return response()->json([
-        'status' => 200,
-        'message' => 'Course retrieved successfully',
-        'data' => $course,
-    ]);
-}
-
+        return response()->json([
+            'status' => 200,
+            'message' => 'Course retrieved successfully',
+            'data' => $course,
+        ]);
+    }
 }

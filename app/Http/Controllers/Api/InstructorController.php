@@ -18,12 +18,13 @@ class InstructorController extends Controller
     public function index(Request $request)
     {
         $ip = $request->ip();
-        $lang = $request->header('Accept-Language', 'en'); 
+        $lang = $request->header('Accept-Language');
 
         $instructors = $this->instructorService->getAllInstructors($ip, $lang);
 
         return response()->json([
-            'status' => 'success',
+            'status' => 200,
+            'message' => 'Instructor retrieved successfully',
             'data' => $instructors,
         ]);
     }
