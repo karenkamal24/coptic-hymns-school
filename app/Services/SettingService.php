@@ -36,16 +36,17 @@ class SettingService
             'logo' => $lang === 'ar' ? $this->setting->logo_ar : $this->setting->logo_en,
             'title' => $lang === 'ar' ? $this->setting->title_ar : $this->setting->title_en,
             'sub_title' => $lang === 'ar' ? $this->setting->sub_title_ar : $this->setting->sub_title_en,
-          'images' => collect($this->setting->images)
-            ->map(fn($image) => url($image))
-            ->toArray(),
+            'images' => collect($this->setting->images)
+                ->map(fn($image) => asset('storage/' . $image))
+                ->toArray(),
+
 
         ];
     }
 
 
 
-      public function getColor(): ?string
+    public function getColor(): ?string
     {
         return $this->setting?->color;
     }
