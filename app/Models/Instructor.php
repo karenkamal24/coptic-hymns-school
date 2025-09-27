@@ -9,7 +9,7 @@ class Instructor extends Model
 {
     use HasFactory;
 
-  
+
     protected $fillable = [
         'full_name_en',
         'full_name_ar',
@@ -28,5 +28,10 @@ class Instructor extends Model
         'contacts' => 'array',
     ];
 
+public function courses()
+{
+    return $this->hasMany(Course::class, 'instructor_id');
+    // افترض إن جدول courses فيه عمود instructor_id يربط الكورس بالمدرب
+}
 
 }
