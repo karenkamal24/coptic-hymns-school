@@ -18,12 +18,6 @@ class EnrollmentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Forms\Form $form): Forms\Form
-    {
-        return $form->schema([
-            // هنا الحقول الخاصة بالإنشاء أو التعديل
-        ]);
-    }
 
     public static function table(Table $table): Table
     {
@@ -80,9 +74,7 @@ class EnrollmentResource extends Resource
     {
         return [
             'index' => Pages\ListEnrollments::route('/'),
-            'create' => Pages\CreateEnrollment::route('/create'),
             'view' => Pages\ViewEnrollment::route('/{record}'),
-            'edit' => Pages\EditEnrollment::route('/{record}/edit'),
         ];
     }
 }
