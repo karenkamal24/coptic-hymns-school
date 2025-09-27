@@ -33,6 +33,7 @@ class AdminPanelProvider extends PanelProvider
             'primary' => $setting?->color ?? Color::Amber,
             ])
              ->brandName($setting?->logo_en ?? 'Coptic Hymns School')
+->renderHook('panels::scripts.after', fn () => view('filament.components.scripts'))
 
 
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
