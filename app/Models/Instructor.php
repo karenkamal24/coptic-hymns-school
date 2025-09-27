@@ -31,7 +31,7 @@ class Instructor extends Model
 public function courses()
 {
     return $this->hasMany(Course::class, 'instructor_id');
-    // افترض إن جدول courses فيه عمود instructor_id يربط الكورس بالمدرب
+   
 }
 
 }
