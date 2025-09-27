@@ -6,8 +6,16 @@ use App\Filament\Resources\SettingResource\Pages;
 use App\Models\Setting;
 use App\Models\Color;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Form;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 
@@ -15,7 +23,7 @@ class SettingResource extends Resource
 {
     protected static ?string $model = Setting::class;
 
-   protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?string $navigationLabel = 'Website Settings';
     protected static ?string $navigationGroup = 'settings';
     protected static ?string $pluralLabel = 'Settings';
@@ -25,57 +33,68 @@ class SettingResource extends Resource
     {
         return $form
             ->schema([
+                Section::make('Website Information')
+                    ->schema([
+                        Grid::make(2)->schema([
+                            TextInput::make('logo_en')
+                                ->label('Logo (English)')
+                                ->required(),
 
-                Forms\Components\Grid::make(2)->schema([
-                    Forms\Components\TextInput::make('logo_en')
-                        ->label('Logo (English)')
-                        ->required(),
+                            TextInput::make('logo_ar')
+                                ->label('Logo (Arabic)')
+                                ->required(),
+                        ]),
 
-                    Forms\Components\TextInput::make('logo_ar')
-                        ->label('Logo (Arabic)')
-                        ->required(),
-                ]),
+                        Grid::make(2)->schema([
+                            TextInput::make('title_en')
+                                ->label('Title (EN)')
+                                ->required(),
 
+                            TextInput::make('title_ar')
+                                ->label('Title (AR)')
+                                ->required(),
+                        ]),
 
-                Forms\Components\Grid::make(2)->schema([
-                    Forms\Components\TextInput::make('title_en')
-                        ->label('Title (EN)')
-                        ->required(),
+                        Grid::make(2)->schema([
+                            TextInput::make('sub_title_en')
+                                ->label('Sub Title (EN)')
+                                ->required(),
 
-                    Forms\Components\TextInput::make('title_ar')
-                        ->label('Title (AR)')
-                        ->required(),
-                ]),
+                            TextInput::make('sub_title_ar')
+                                ->label('Sub Title (AR)')
+                                ->required(),
+                        ]),
+                    ]),
 
-                Forms\Components\Grid::make(2)->schema([
-                    Forms\Components\TextInput::make('sub_title_en')
-                        ->label('Sub Title (EN)')
-                        ->required(),
+                Section::make('Banners')
+                    ->schema([
+                        Repeater::make('images')
+                            ->label('Banners')
+                            ->schema([
+                                FileUpload::make('image')
+                                    ->label('Upload Banner')
+                                    ->image()
+                                    ->directory('banners')
+                                    ->visibility('public')
+                                    ->storeFileNamesIn('image_name')
+                                    ->imageResizeMode('cover')
+                                    ->imageCropAspectRatio('16:9')
+                                    ->required(),
+                            ])
+                            ->minItems(1)
+                            ->maxItems(10) 
+                            ->reorderable()
+                            ->columns(1),
+                    ]),
 
-                    Forms\Components\TextInput::make('sub_title_ar')
-                        ->label('Sub Title (AR)')
-                        ->required(),
-                ]),
-
-                Forms\Components\Grid::make(1)->schema([
-                    Forms\Components\FileUpload::make('images')
-                        ->label('Banners')
-                        ->multiple()
-                        ->reorderable()
-                        ->minFiles(2)
-                        ->maxFiles(10)
-                        ->directory('banners')
-                        ->image()
-                        ->required(),
-                ]),
-
-                Forms\Components\Grid::make(1)->schema([
-                    Forms\Components\ColorPicker::make('color')
-                        ->label('Website Color')
-                        ->required(),
-                ]),
-
-
+                Section::make('Website Color')
+                    ->schema([
+                        Grid::make(1)->schema([
+                            ColorPicker::make('color')
+                                ->label('Website Color')
+                                ->required(),
+                        ]),
+                    ]),
             ]);
     }
 
@@ -83,11 +102,11 @@ class SettingResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('logo_en')->label('Logo EN')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('logo_ar')->label('Logo AR')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('title_en')->label('Title EN')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('title_ar')->label('Title AR')->sortable()->searchable(),
-                Tables\Columns\ColorColumn::make('color')->label('Website Color'),
+                TextColumn::make('logo_en')->label('Logo EN')->sortable()->searchable(),
+                TextColumn::make('logo_ar')->label('Logo AR')->sortable()->searchable(),
+                TextColumn::make('title_en')->label('Title EN')->sortable()->searchable(),
+                TextColumn::make('title_ar')->label('Title AR')->sortable()->searchable(),
+                ColorColumn::make('color')->label('Website Color'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
