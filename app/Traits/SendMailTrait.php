@@ -5,6 +5,7 @@ namespace App\Traits;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use Illuminate\Support\Facades\Log;
 
 trait SendMailTrait
 {
@@ -40,7 +41,7 @@ trait SendMailTrait
                 'message' => 'Mail sent successfully',
             ];
         } catch (Exception $e) {
-            \Log::error('Mail error: ' . $e->getMessage());
+            Log::error('Mail error: ' . $e->getMessage());
 
             return [
                 'status' => 500,

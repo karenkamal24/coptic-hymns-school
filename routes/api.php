@@ -18,3 +18,9 @@ Route::get('get-setting', [SettingController::class, 'getSetting']);
 
 
 Route::get('/my-courses/{email}', [EnrollmentController::class, 'approvedCourses'])->name('api.my.courses');
+
+Route::post('/courses/{course}/rate', [CourseController::class, 'rateCourse']);
+Route::put('/reviews/{review}', [CourseController::class, 'updateCourseReview']);
+
+
+Route::delete('/reviews/{review}', [CourseController::class, 'deleteCourseReview']);
