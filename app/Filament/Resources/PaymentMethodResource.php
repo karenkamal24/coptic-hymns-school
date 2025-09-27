@@ -48,9 +48,10 @@ class PaymentMethodResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
-             
+
             ]);
     }
 
