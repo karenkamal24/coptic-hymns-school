@@ -6,10 +6,12 @@ use App\Models\Enrollment;
 use App\Models\Course;
 use App\Models\PaymentMethod;
 use App\Traits\UserLocationTrait;
+use App\Traits\SendMailTrait;
 
 class EnrollmentService
 {
     use UserLocationTrait;
+         use SendMailTrait;
 
 public function createEnrollment(array $data, string $ip, ?string $langHeader = null): array
 {
@@ -73,5 +75,39 @@ public function createEnrollment(array $data, string $ip, ?string $langHeader = 
             'status' => $enrollment->status,
             'enrollment_id' => $enrollment->id,
         ];
+    }
+
+
+    public function getApprovedCoursesByEmail(string $email)
+    {
+        $enrollments = Enrollment::with('course')
+            ->where('email', $email)
+            ->where('status', 'confirmed')
+            ->get();
+
+        return $enrollments;
+    }
+
+    public function formatEnrollments($enrollments)
+    {
+        return $enrollments->map(function ($enrollment) {
+            $course = $enrollment->course;
+
+            return [
+                'enrollment_id' => $enrollment->id,
+                'enrolled_at' => $enrollment->created_at->format('d M Y'),
+                'course' => [
+                    'id' => $course->id,
+                    'title' => $course->title,
+                    'description' => $course->description,
+                    'image_url' => $course->image_url,
+                    'videos' => $course->videos,
+                    'instructor' => $course->instructor,
+                    'rate' => $course->rate,
+                    'duration_by_week' => $course->duration_by_weak,
+                    'enrollments_count' => $course->enrollments_count,
+                ],
+            ];
+        });
     }
 }

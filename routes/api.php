@@ -17,3 +17,4 @@ Route::get('get-information', [SettingController::class, 'getInformation']);
 Route::get('get-setting', [SettingController::class, 'getSetting']);
 
 
+Route::get('/my-courses/{email}', [EnrollmentController::class, 'approvedCourses'])->name('api.my.courses');

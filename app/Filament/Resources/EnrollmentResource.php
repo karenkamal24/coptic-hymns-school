@@ -19,20 +19,23 @@ class EnrollmentResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('name')->label('Student'),
-                Tables\Columns\TextColumn::make('email')->label('Email'),
-                Tables\Columns\TextColumn::make('phone')->label('Phone'),
+public static function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            Tables\Columns\TextColumn::make('id')->sortable(),
+            Tables\Columns\TextColumn::make('name')->label('Student'),
+            Tables\Columns\TextColumn::make('email')->label('Email'),
+            Tables\Columns\TextColumn::make('phone')->label('Phone'),
+            Tables\Columns\TextColumn::make('course.title')->label('Course'),
+            Tables\Columns\TextColumn::make('status')->badge(),
+        ])
+        ->filters([])
+        ->actions([
+            Tables\Actions\ViewAction::make(), 
+        ]);
+}
 
-                Tables\Columns\TextColumn::make('course.title')->label('Course'),
-                Tables\Columns\TextColumn::make('status')->badge(),
-            ])
-            ->filters([]);
-    }
 
     public static function infolist(Infolists\Infolist $infolist): Infolists\Infolist
     {

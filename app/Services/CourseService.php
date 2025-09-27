@@ -43,4 +43,5 @@ class CourseService
             'rate' => $course->rate ?? 0,
         ];
     }
+    
 }
