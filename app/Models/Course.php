@@ -21,6 +21,7 @@ class Course extends Model
         'instructor',
         'rate',
         'duration_by_weak',
+        'enrollments_count',
     ];
 
     protected $casts = [

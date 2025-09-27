@@ -20,7 +20,7 @@ class CourseService
                 'price' => $countryCode === 'EG' ? $course->price_egp . ' EGP' : $course->price_usd . ' USD',
                 'instructor' => $course->instructor,
                 'image' => $course->image ? asset('storage/' . $course->image) : null,
-                'students_count' => 0,
+               'enrollments_count'=>$course->enrollments_count,
                 'rate' => 0,
             ];
         });
@@ -39,7 +39,7 @@ class CourseService
             'instructor' => $course->instructor,
             'duration_by_weak' => $course->duration_by_weak,
             'image' => $course->image ? asset('storage/' . $course->image) : null,
-            'students_count' => 0,
+            'enrollments_count'=>$course->enrollments_count,
             'rate' => $course->rate ?? 0,
         ];
     }
