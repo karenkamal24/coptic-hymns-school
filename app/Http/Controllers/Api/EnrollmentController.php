@@ -15,21 +15,26 @@ class EnrollmentController extends Controller
     }
 
 
-    public function enrol(Request $request)
-    {
-        $request->validate([
-            'course_id' => 'required|exists:courses,id',
-            'name'      => 'required|string',
-            'email'     => 'required|email',
-            'phone'     => 'nullable|string',
-        ]);
+public function enrol(Request $request)
+{
+    $request->validate([
+        'course_id' => 'required|exists:courses,id',
+        'name'      => 'required|string',
+        'email'     => 'required|email',
+        'phone'     => 'nullable|string',
+    ]);
 
-        $response = $this->service->createEnrollment($request->all(), $request->ip());
+    $langHeader = $request->header('Accept-Language'); 
+    $response = $this->service->createEnrollment(
+        $request->all(),
+        $request->ip(),
+        $langHeader
+    );
 
-        return response()->json($response);
-    }
+    return response()->json($response);
+}
 
- 
+
     public function uploadPayment(Request $request)
     {
         $request->validate([
