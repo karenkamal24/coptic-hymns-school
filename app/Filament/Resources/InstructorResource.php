@@ -40,6 +40,7 @@ class InstructorResource extends Resource
                         TextInput::make('specialty_en')->label('Specialty (EN)'),
                         TextInput::make('specialty_ar')->label('Specialty (AR)'),
                         TextInput::make('experience')->label('Experience'),
+                         TextInput::make('students_count')->label('students count'),
                     ]),
                     Grid::make(1)->schema([
                         Textarea::make('description_en')->label('Description (EN)'),

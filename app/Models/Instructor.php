@@ -20,6 +20,7 @@ class Instructor extends Model
         'experience',
         'images',
         'contacts',
+        'students_count'
     ];
 
 
@@ -28,10 +29,6 @@ class Instructor extends Model
         'contacts' => 'array',
     ];
 
-public function courses()
-{
-    return $this->hasMany(Course::class, 'instructor_id');
-   
-}
+
 
 }

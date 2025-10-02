@@ -15,7 +15,7 @@ public function getAllInstructors(string $ip, ?string $lang = null)
 {
     [$countryCode, $lang] = $this->getUserSettingsByIp($ip, $lang);
 
-    $instructor = Instructor::first(); 
+    $instructor = Instructor::first();
 
     $images = collect($instructor->images ?? [])
         ->map(fn($img) => isset($img['image']) ? asset('storage/' . $img['image']) : null)
@@ -34,7 +34,7 @@ public function getAllInstructors(string $ip, ?string $lang = null)
         'experience' => $instructor->experience,
         'images' => $images,
         'contacts' => $instructor->contacts ?? [],
-        'students_count' => $studentsCount,
+         'students_count' => $instructor->students_count,
     ];
 }
 
