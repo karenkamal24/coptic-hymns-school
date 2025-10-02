@@ -10,6 +10,7 @@ use Filament\Infolists;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use App\Filament\Resources\EnrollmentResource\Pages;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class EnrollmentResource extends Resource
@@ -28,14 +29,23 @@ public static function table(Table $table): Table
             Tables\Columns\TextColumn::make('email')->label('Email'),
             Tables\Columns\TextColumn::make('phone')->label('Phone'),
             Tables\Columns\TextColumn::make('course.title')->label('Course'),
-            Tables\Columns\TextColumn::make('status')->badge(),
+            Tables\Columns\TextColumn::make('status')
+                ->badge()
+                ->formatStateUsing(fn (string $state) => ucfirst(str_replace('_', ' ', $state))),
         ])
-        ->filters([])
+        ->filters([
+            SelectFilter::make('status')
+                ->options([
+                    'pending_payment' => 'Pending Payment',
+                    'waiting_verification' => 'Waiting Verification',
+                    'confirmed' => 'Confirmed',
+                    'rejected' => 'Rejected',
+                ])
+                ->label('Filter by Status'),
+        ])
         ->actions([
             Tables\Actions\ViewAction::make(),
             Tables\Actions\DeleteAction::make(),
-
-
         ]);
 }
 
