@@ -9,26 +9,26 @@ use App\Traits\SendMailTrait;
 
 class ViewEnrollment extends ViewRecord
 {
-    use SendMailTrait;
+    use SendMailTrait; 
 
     protected static string $resource = EnrollmentResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-Actions\Action::make('accept')
-    ->label('Accept')
-    ->color('success')
-    ->requiresConfirmation()
-    ->action(function ($record) {
-        $record->update(['status' => 'confirmed']);
+            Actions\Action::make('accept')
+                ->label('Accept')
+                ->color('success')
+                ->requiresConfirmation()
+                ->action(function ($record) {
+                    $record->update(['status' => 'confirmed']);
 
-        $courseTitle = $record->course?->title ?? 'Your Course';
-        $msgTitle = "Enrollment Accepted";
-   $link = "https://coptichymnsschool.com";
+                    $courseTitle = $record->course?->title ?? 'Your Course';
+                    $msgTitle = "Enrollment Accepted";
+                    $link = "https://coptichymnsschool.com";
 
 
-        $msgContent = "
+                    $msgContent = "
             <h3>Congratulations </h3>
             <p>Dear {$record->name},</p>
             <p>Your enrollment has been <b>accepted</b> successfully.</p>
@@ -39,8 +39,8 @@ Actions\Action::make('accept')
             <p>We’re excited to see you soon!</p>
         ";
 
-        $this->sendEmail($record->email, $msgTitle, $msgContent);
-    }),
+                    $this->sendEmail($record->email, $msgTitle, $msgContent);
+                }),
 
             Actions\Action::make('reject')
                 ->label('Reject')

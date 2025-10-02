@@ -34,10 +34,9 @@ public function getAllInstructors(string $ip, ?string $lang = null)
         'experience' => $instructor->experience,
         'images' => $images,
         'contacts' => $instructor->contacts ?? [],
-         'students_count' => $instructor->students_count,
+        'students_count' => $instructor->students_count,
     ];
 }
-
 
 
 }

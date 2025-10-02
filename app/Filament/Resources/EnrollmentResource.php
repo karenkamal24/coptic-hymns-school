@@ -32,7 +32,10 @@ public static function table(Table $table): Table
         ])
         ->filters([])
         ->actions([
-            Tables\Actions\ViewAction::make(), 
+            Tables\Actions\ViewAction::make(),
+            Tables\Actions\DeleteAction::make(),
+
+
         ]);
 }
 
