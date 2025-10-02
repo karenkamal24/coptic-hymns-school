@@ -88,26 +88,34 @@ public function createEnrollment(array $data, string $ip, ?string $langHeader = 
         return $enrollments;
     }
 
-    public function formatEnrollments($enrollments)
-    {
-        return $enrollments->map(function ($enrollment) {
+public function formatEnrollments($enrollments, ?string $lang = 'en')
+{
+    return $enrollments
+        ->filter(fn($enrollment) => $enrollment->course) // التأكد من وجود course
+        ->map(function ($enrollment) use ($lang) {
             $course = $enrollment->course;
+
+            $title = $lang === 'ar' ? ($course->title_ar ?? $course->title_en) : ($course->title_en ?? $course->title_ar);
+            $description = $lang === 'ar' ? ($course->description_ar ?? '') : ($course->description_en ?? '');
+            $videos = $lang === 'ar' ? ($course->videos_ar ?? []) : ($course->videos_en ?? []);
 
             return [
                 'enrollment_id' => $enrollment->id,
                 'enrolled_at' => $enrollment->created_at->format('d M Y'),
                 'course' => [
                     'id' => $course->id,
-                    'title' => $course->title,
-                    'description' => $course->description,
-                    'image_url' => $course->image_url,
-                    'videos' => $course->videos,
+                    'title' => $title,
+                    'description' => $description,
+                    'image_url' => $course->image ? asset('storage/' . $course->image) : null,
+                    'videos' => $videos,
                     'instructor' => $course->instructor,
-                    'rate' => $course->rate,
+                    'rate' => $course->rate ?? null,
                     'duration_by_week' => $course->duration_by_weak,
-                    'enrollments_count' => $course->enrollments_count,
+                    'enrollments_count' => $course->enrollments_count ?? 0,
                 ],
             ];
         });
-    }
+}
+
+
 }

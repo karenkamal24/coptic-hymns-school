@@ -17,7 +17,8 @@ class Course extends Model
         'description_ar',
         'price_usd',
         'price_egp',
-        'videos',
+        'videos_ar',
+        'videos_en',
         'instructor',
         'rate',
         'duration_by_weak',
@@ -25,7 +26,8 @@ class Course extends Model
     ];
 
     protected $casts = [
-        'videos' => 'array',
+        'videos_en' => 'array',
+        'videos_ar' => 'array',
         'price_usd' => 'decimal:2',
         'price_egp' => 'decimal:2',
         'rate' => 'decimal:2',

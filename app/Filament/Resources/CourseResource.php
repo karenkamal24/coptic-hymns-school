@@ -78,8 +78,24 @@ class CourseResource extends Resource
                         ->label('Duration per Week (weeks )')
                         ->required(),
 
-                    Forms\Components\Repeater::make('videos')
-                        ->label('Videos')
+                    Forms\Components\Repeater::make('videos_ar')
+                        ->label('Videos (AR)')
+                        ->schema([
+                            Forms\Components\TextInput::make('title')
+                                ->label('Video Title')
+                                ->required(),
+                            Forms\Components\TextInput::make('url')
+                                ->label('Video URL')
+                                ->url()
+                                ->required(),
+                        ])
+                        ->default([])
+                        ->collapsible()
+                        ->orderable(),
+
+
+                    Forms\Components\Repeater::make('videos_en')
+                        ->label('Videos (EN)')
                         ->schema([
                             Forms\Components\TextInput::make('title')
                                 ->label('Video Title')
@@ -111,7 +127,7 @@ class CourseResource extends Resource
                 BadgeColumn::make('price_usd')->label('Price (USD)')->color('success'),
                 BadgeColumn::make('price_egp')->label('Price (EGP)')->color('primary'),
                 TextColumn::make('duration_by_weak')->label('Duration (Weeks)')->sortable(),
-                TextColumn::make('videos')->label('Videos Count')->getStateUsing(fn($record) => count($record->videos))->sortable(),
+
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),

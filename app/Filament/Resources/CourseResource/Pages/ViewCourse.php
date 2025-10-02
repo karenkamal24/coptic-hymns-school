@@ -66,15 +66,27 @@ class ViewCourse extends ViewRecord
                         ->getStateUsing(fn() => $record->image ? asset('storage/' . $record->image) : null),
                 ]),
 
-            // Videos as links
-            Section::make('Videos')
+          
+            Section::make('Videos (Arabic)')
                 ->schema(
-                    collect($record->videos ?? [])->map(fn($video, $index) =>
-                        TextEntry::make("video_{$index}")
+                    collect($record->videos_ar ?? [])->map(
+                        fn($video, $index) =>
+                        TextEntry::make("video_ar_{$index}")
                             ->label($video['title'] ?? "Video {$index}")
                             ->getStateUsing(fn() => $video['url'] ?? null)
                     )->toArray()
                 ),
+
+            Section::make('Videos (English)')
+                ->schema(
+                    collect($record->videos_en ?? [])->map(
+                        fn($video, $index) =>
+                        TextEntry::make("video_en_{$index}")
+                            ->label($video['title'] ?? "Video {$index}")
+                            ->getStateUsing(fn() => $video['url'] ?? null)
+                    )->toArray()
+                ),
+
         ]);
     }
 }

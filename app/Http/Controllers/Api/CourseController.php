@@ -31,7 +31,7 @@ class CourseController extends Controller
         ]);
     }
 
-    public function show(Request $request, int $id)
+    public function show(Request $request,  $id)
     {
         $ip = $request->ip();
         $lang = $request->header('Accept-Language');

@@ -52,33 +52,29 @@ public function enrol(Request $request)
     }
 
 
-  public function approvedCourses(Request $request)
-    {
-        $email = $request->email;
-        $ip = $request->ip();
-
-        [$countryCode, $lang] = $this->getUserSettingsByIp($ip, $request->header('Accept-Language'));
-        app()->setLocale($lang);
-
-        $enrollments = $this->service->getApprovedCoursesByEmail($email);
-
-        if ($enrollments->isEmpty()) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'No approved courses yet.',
-                'data' => [],
-                'country_code' => $countryCode,
-                'language' => $lang,
-            ]);
-        }
-
-        $data = $this->service->formatEnrollments($enrollments);
-
+public function approvedCourses(Request $request, $email)
+{
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return response()->json([
-            'status' => 'success',
-            'message' => 'Approved courses retrieved successfully.',
-            'data' => $data,
-
-        ]);
+            'status' => 'error',
+            'message' => 'Invalid email.',
+        ], 422);
     }
+
+    $ip = $request->ip();
+    [$countryCode, $lang] = $this->getUserSettingsByIp($ip, $request->header('Accept-Language'));
+    app()->setLocale($lang);
+
+    $enrollments = $this->service->getApprovedCoursesByEmail($email);
+
+    $data = $this->service->formatEnrollments($enrollments, $lang)->values();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => $data->isEmpty() ? 'No approved courses yet.' : 'Approved courses retrieved successfully.',
+        'data' => $data,
+    ]);
+}
+
+
 }
