@@ -75,7 +75,7 @@ class CourseResource extends Resource
 
                     Forms\Components\TextInput::make('duration_by_weak')
                         ->numeric()
-                        ->label('Duration per Week (hours)')
+                        ->label('Duration per Week (weeks )')
                         ->required(),
 
                     Forms\Components\Repeater::make('videos')
@@ -110,7 +110,7 @@ class CourseResource extends Resource
                 TextColumn::make('instructor')->label('Instructor')->sortable(),
                 BadgeColumn::make('price_usd')->label('Price (USD)')->color('success'),
                 BadgeColumn::make('price_egp')->label('Price (EGP)')->color('primary'),
-                TextColumn::make('duration_by_weak')->label('Duration (hours)')->sortable(),
+                TextColumn::make('duration_by_weak')->label('Duration (Weeks)')->sortable(),
                 TextColumn::make('videos')->label('Videos Count')->getStateUsing(fn($record) => count($record->videos))->sortable(),
             ])
             ->actions([
