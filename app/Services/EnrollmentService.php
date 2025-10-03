@@ -62,14 +62,29 @@ public function createEnrollment(array $data, string $ip, ?string $langHeader = 
 
     public function uploadReceipt(int $enrollmentId, $file): array
     {
-        $enrollment = Enrollment::findOrFail($enrollmentId);
+        $enrollment = Enrollment::with('course')->findOrFail($enrollmentId);
+
 
         $path = $file->store('receipts', 'public');
+
 
         $enrollment->update([
             'receipt_image' => $path,
             'status' => 'waiting_verification',
         ]);
+        $msgTitle = "New Payment Receipt Uploaded - Enrollment #{$enrollment->id}";
+        $msgContent = "
+            <h3>New Payment Receipt Submitted</h3>
+            <p><strong>Enrollment ID:</strong> {$enrollment->id}</p>
+            <p><strong>Student Name:</strong> {$enrollment->name}</p>
+            <p><strong>Email:</strong> {$enrollment->email}</p>
+            <p><strong>Course:</strong> {$enrollment->course->title}</p>
+            <p><strong>Status:</strong> {$enrollment->status}</p>
+            <p><strong>Receipt Image:</strong>
+                <a href='" . asset('storage/' . $path) . "' target='_blank'>View Receipt</a>
+            </p>
+        ";
+        $this->sendEmail("barakatragy@gmail.com", $msgTitle, $msgContent);
 
         return [
             'status' => $enrollment->status,
